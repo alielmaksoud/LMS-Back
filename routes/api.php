@@ -22,12 +22,17 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', 'AuthController@login');
 Route::get('/admin', 'AdminsController@index');
 Route::get('/admin/{id}', 'AdminsController@show');
+Route::post('/register', 'AuthController@register');
+Route::post('/admin', 'AdminsController@store');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
     // Route::resource('admin', 'AdminsController');
-    Route::post('/admin', 'AdminsController@store');
     Route::put('/admin/{id}', 'AdminsController@update');
     Route::delete('/admin/{id}', 'AdminsController@destroy');
     Route::post('/logout','AuthController@logout');
-    Route::post('/register', 'AuthController@register');
+    Route::post('/student', 'StudentsController@store');
+    Route::put('/student/{id}', 'StudentsController@update');
+    Route::delete('/student/{id}', 'StudentsController@destroy');
     });
+Route::post('/register', 'AuthController@register');
+Route::post('/admin', 'AdminsController@store');
