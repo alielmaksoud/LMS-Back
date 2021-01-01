@@ -47,5 +47,10 @@ class AuthController extends Controller
         ]);    
     }
 
+    public function verifytokens()
+    {
+        return response()->json(['message' => 'Verified']);
+    }
+
 
 }
