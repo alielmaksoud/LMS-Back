@@ -31,6 +31,10 @@ Route::get('/student/{id}', 'StudentsController@show');
 //attendance get routes
 Route::get('/attendance', 'AttendanceController@index');
 Route::get('/attendance/{id}', 'AttendanceController@show');
+//section get routes
+Route::get('/section', 'SectionController@index');
+//classes get routes
+Route::get('/classes', 'ClassesController@index');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
     //admin Avatar routes

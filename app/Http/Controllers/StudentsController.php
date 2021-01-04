@@ -14,7 +14,10 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        return Students::all();
+         return Students::all();
+
+        // $students = students::with('GetAttendance')->get();
+        // dd($students);
     }
 
     /**

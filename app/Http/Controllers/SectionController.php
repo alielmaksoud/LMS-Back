@@ -15,6 +15,8 @@ class SectionController extends Controller
     public function index()
     {
         return Section::all();
+        // $section = section::with('Getstudents')->get();
+        // dd($section);
     }
 
     /**

@@ -27,24 +27,23 @@ class AdminsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'file' => 'bail|required|mimes:jpg,png,Jpeg',
-            'password' => 'min:6|required'
-        ]);
+        // $request->validate([
+        //     'file' => 'bail|required|mimes:jpg,png,Jpeg',
+        //     'password' => 'min:6|required'
+        // ]);
 
         $data = $request->all();
-        $imagename = $request['picture'].".".$request->file('file')->extension();
-        $image = $request->file('file')->storeAs('admins/avatars', $imagename);
+        // $imagename = $request['picture'].".".$request->file('file')->extension();
+        // $image = $request->file('file')->storeAs('admins/avatars', $imagename);
         $admin = new Admins();
         $admin->fill($data);
-        $admin->picture = $imagename;
+        // $admin->picture = $imagename;
         $admin->save();
 
         return response()->json([
             'status' => 200,
             'admin'  => $admin,
-             'image' => $image,
-             'imagename' => $imagename
+
         ]);
     }
 

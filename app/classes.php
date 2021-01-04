@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class classes extends Model
 {
     protected $fillable = [
-        'class_id', 'section_id', 'class_name'
+           'section_id', 'class_name'
          ];
+
+         public function Getsections()
+        {
+            return $this->hasMany(section::class, 'class_id', 'id');
+        }
 }
