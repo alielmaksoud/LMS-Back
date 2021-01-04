@@ -18,13 +18,12 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-
+//admin avatar route
+Route::get('/admins/avatars/{avatarName}', 'AvatarController@AdminAvatar');
+//admin auth routes
 Route::post('/login', 'AuthController@login');
 Route::get('/admin', 'AdminsController@index');
 Route::get('/admin/{id}', 'AdminsController@show');
-Route::post('/register', 'AuthController@register');
-Route::post('/admin', 'AdminsController@store');
-
 //student get routes
 Route::get('/student', 'StudentsController@index');
 Route::get('/student/{id}', 'StudentsController@show');
@@ -34,27 +33,29 @@ Route::get('/attendance', 'AttendanceController@index');
 Route::get('/attendance/{id}', 'AttendanceController@show');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
-    // Route::resource('admin', 'AdminsController');
-    Route::put('/admin/{id}', 'AdminsController@update');
+    //admin Avatar routes
+    Route::delete('/admins/delavatar/{avatarName}', 'AvatarController@DelAdminAvatar');
+    //admin auth routes
+    Route::post('/admin', 'AdminsController@store');
+    Route::post('/admin/{id}', 'AdminsController@update');
     Route::delete('/admin/{id}', 'AdminsController@destroy');
     Route::post('/logout','AuthController@logout');
-
+    Route::post('/verify','AuthController@verifytokens');
     //students routes
     Route::post('/student', 'StudentsController@store');
     Route::put('/student/{id}', 'StudentsController@update');
     Route::delete('/student/{id}', 'StudentsController@destroy');
-
     //Attendance routes
     Route::post('/attendance', 'AttendanceController@store');
     Route::put('/attendance/{id}', 'AttendanceController@update');
     Route::delete('/attendance/{id}', 'AttendanceController@destroy');
+    //Classes routes
     Route::post('/classes', 'ClassesController@store');
     Route::put('/classes/{id}', 'ClassesController@update');
     Route::delete('/classes/{id}', 'ClassesController@destroy');
+    //Section Routes
     Route::post('/section', 'SectionController@store');
     Route::put('/section/{id}', 'SectionController@update');
     Route::delete('/section/{id}', 'SectionController@destroy');
-    });
-Route::post('/register', 'AuthController@register');
-Route::post('/admin', 'AdminsController@store');
 
+    });
