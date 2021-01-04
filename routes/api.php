@@ -18,14 +18,12 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-
-
+//admin avatar route
+Route::get('/admins/avatars/{avatarName}', 'AvatarController@AdminAvatar');
 //admin auth routes
-Route::post('/admin', 'AdminsController@store');
 Route::post('/login', 'AuthController@login');
 Route::get('/admin', 'AdminsController@index');
 Route::get('/admin/{id}', 'AdminsController@show');
-
 //student get routes
 Route::get('/student', 'StudentsController@index');
 Route::get('/student/{id}', 'StudentsController@show');
@@ -35,8 +33,11 @@ Route::get('/attendance', 'AttendanceController@index');
 Route::get('/attendance/{id}', 'AttendanceController@show');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
+    //admin Avatar routes
+    Route::delete('/admins/delavatar/{avatarName}', 'AvatarController@DelAdminAvatar');
     //admin auth routes
-    Route::put('/admin/{id}', 'AdminsController@update');
+    Route::post('/admin', 'AdminsController@store');
+    Route::post('/admin/{id}', 'AdminsController@update');
     Route::delete('/admin/{id}', 'AdminsController@destroy');
     Route::post('/logout','AuthController@logout');
     Route::post('/verify','AuthController@verifytokens');

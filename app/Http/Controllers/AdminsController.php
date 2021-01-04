@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Admins;
 use Illuminate\Http\Request;
+use File;
+use Storage;
 
 class AdminsController extends Controller
 {
@@ -25,14 +27,24 @@ class AdminsController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'file' => 'bail|required|mimes:jpg,png,Jpeg',
+            'password' => 'min:6|required'
+        ]);
+
         $data = $request->all();
+        $imagename = $request['picture'].".".$request->file('file')->extension();
+        $image = $request->file('file')->storeAs('admins/avatars', $imagename);
         $admin = new Admins();
         $admin->fill($data);
+        $admin->picture = $imagename;
         $admin->save();
 
         return response()->json([
             'status' => 200,
-            'admin'  => $admin
+            'admin'  => $admin,
+             'image' => $image,
+             'imagename' => $imagename
         ]);
     }
 
@@ -56,11 +68,41 @@ class AdminsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'file' => 'bail|mimes:jpg,png,jpeg',
+            'password' => 'min:6'
+        ]);
+
         $data = $request->all();
         
         $admin = Admins::where('id', $id)->first();
-        $admin->update($data);
-
+        if(!empty($request['password']) && $request['password'] !== "undefined"){
+            $admin->password = $request['password'];
+        }if(!empty($request['first_name']) && $request['first_name'] !== "undefined"){
+            $admin->first_name = $request['first_name'];
+        }if(!empty($request['last_name']) && $request['last_name'] !== "undefined"){
+            $admin->last_name = $request['last_name'];
+        }if(!empty($request['role']) && $request['role'] !== "undefined"){
+            $admin->role = $request['role'];
+        }if(!empty($request['email']) && $request['email'] !== "undefined"){
+            $admin->email = $request['email'];
+        }if(!empty($request['phone']) && $request['phone'] !== "undefined"){
+            $admin->phone = $request['phone'];
+        }if(!empty($request['file']) && !empty($request['picture'])){
+            $imagename = $request['picture'].".".$request->file('file')->extension();
+            $oldimage = $admin->picture .".".$request->file('file')->extension();
+            $fileName = storage_path()."/app/admins/avatars/" . $imagename ;
+            if(File::exists($fileName)){
+                File::delete($fileName);
+            }
+            $image = $request->file('file')->storeAs('admins/avatars', $imagename);
+            if(File::exists($oldimage)){
+                File::delete($oldimage);
+            }
+            $admin->picture = $imagename;
+        }
+        $admin->save();
+        
         return response()->json([
             'status' => 200,
             'admin'  => $admin
@@ -76,5 +118,7 @@ class AdminsController extends Controller
     public function destroy($id)
     {
         Admins::where('id', $id)->delete();
+
+        return Admins::all();
     }
 }
