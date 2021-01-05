@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-
+Route::post('/admin', 'AdminsController@store');
 //admin avatar route
 Route::get('/admins/avatars/{avatarName}', 'AvatarController@AdminAvatar');
 //admin auth routes
@@ -40,7 +40,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     //admin Avatar routes
     Route::delete('/admins/delavatar/{avatarName}', 'AvatarController@DelAdminAvatar');
     //admin auth routes
-    Route::post('/admin', 'AdminsController@store');
+    
     Route::post('/admin/{id}', 'AdminsController@update');
     Route::delete('/admin/{id}', 'AdminsController@destroy');
     Route::post('/logout','AuthController@logout');

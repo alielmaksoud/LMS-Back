@@ -31,6 +31,7 @@ class StudentsController extends Controller
         $data = $request->all();
         $student = new Students();
         $student->fill($data);
+        $student->student_id = $data['first_name'] . $data['phone'];
         $student->save();
 
         return response()->json([

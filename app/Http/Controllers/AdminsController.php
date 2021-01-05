@@ -33,11 +33,11 @@ class AdminsController extends Controller
         // ]);
 
         $data = $request->all();
-        // $imagename = $request['picture'].".".$request->file('file')->extension();
-        // $image = $request->file('file')->storeAs('admins/avatars', $imagename);
+        $imagename = $request['picture'].".".$request->file('file')->extension();
+        $image = $request->file('file')->storeAs('admins/avatars', $imagename);
         $admin = new Admins();
         $admin->fill($data);
-        // $admin->picture = $imagename;
+        $admin->picture = $imagename;
         $admin->save();
 
         return response()->json([

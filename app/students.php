@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class students extends Model
 {
     protected $fillable = [
-       'student_id', 'first_name', 'last_name', 'email', 'phone', 'picture', 'section_id'
+        'class_id','student_id','first_name', 'last_name', 'email', 'phone', 'picture', 'section_id'
         ];
 
 
@@ -15,4 +15,5 @@ class students extends Model
         {
             return $this->hasMany(attendance::class, 'student_id', 'id');
         }
+    
 }

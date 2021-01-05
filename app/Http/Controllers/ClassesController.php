@@ -14,8 +14,9 @@ class ClassesController extends Controller
      */
     public function index()
     {
-        $classes = classes::with('Getsections')->get();
-        dd($classes);
+         $sections = classes::with('Getsections')->get();
+        // $students = classes::with('Getstudents')->get();
+        dd($sections);
         // return Classes::all();
     }
 
