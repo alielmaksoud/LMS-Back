@@ -18,8 +18,9 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 Route::post('/admin', 'AdminsController@store');
-//admin avatar route
+//avatar route
 Route::get('/admins/avatars/{avatarName}', 'AvatarController@AdminAvatar');
+Route::get('/students/avatars/{avatarName}', 'AvatarController@StudentAvatar');
 //admin auth routes
 Route::post('/login', 'AuthController@login');
 Route::get('/admin', 'AdminsController@index');
@@ -33,12 +34,15 @@ Route::get('/attendance', 'AttendanceController@index');
 Route::get('/attendance/{id}', 'AttendanceController@show');
 //section get routes
 Route::get('/section', 'SectionController@index');
+Route::get('/section/{id}', 'SectionController@show');
 //classes get routes
 Route::get('/classes', 'ClassesController@index');
+Route::get('/classes/{id}', 'ClassesController@show');
 
 Route::group(['middleware' => ['jwt.verify']], function() {
-    //admin Avatar routes
+    // Avatar routes
     Route::delete('/admins/delavatar/{avatarName}', 'AvatarController@DelAdminAvatar');
+    Route::delete('/students/delavatar/{avatarName}', 'AvatarController@DelStudentAvatar');
     //admin auth routes
     
     Route::post('/admin/{id}', 'AdminsController@update');
@@ -47,7 +51,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('/verify','AuthController@verifytokens');
     //students routes
     Route::post('/student', 'StudentsController@store');
-    Route::put('/student/{id}', 'StudentsController@update');
+    Route::post('/student/{id}', 'StudentsController@update');
     Route::delete('/student/{id}', 'StudentsController@destroy');
     //Attendance routes
     Route::post('/attendance', 'AttendanceController@store');
@@ -57,6 +61,8 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('/classes', 'ClassesController@store');
     Route::put('/classes/{id}', 'ClassesController@update');
     Route::delete('/classes/{id}', 'ClassesController@destroy');
+    Route::get('/classesinfo', 'ClassesController@SectionStudent');
+    
     //Section Routes
     Route::post('/section', 'SectionController@store');
     Route::put('/section/{id}', 'SectionController@update');

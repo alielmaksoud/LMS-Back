@@ -44,9 +44,9 @@ class SectionController extends Controller
      * @param  \App\section  $section
      * @return \Illuminate\Http\Response
      */
-    public function show(section $section)
+    public function show(section $section, $id)
     {
-        return Admins::where('id', $id)->first();
+        return section::where('id', $id)->first();
     }
 
 
@@ -61,7 +61,7 @@ class SectionController extends Controller
     {
         $data = $request->all();
         
-        $section = Admins::where('id', $id)->first();
+        $section = section::where('id', $id)->first();
         $section->update($data);
 
         return response()->json([

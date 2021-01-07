@@ -14,10 +14,10 @@ class ClassesController extends Controller
      */
     public function index()
     {
-         $sections = classes::with('Getsections')->get();
-        // $students = classes::with('Getstudents')->get();
-        dd($sections);
-        // return Classes::all();
+        //  $sections = classes::with('Getsections')->get();
+        // // $students = classes::with('Getstudents')->get();
+        // dd($sections);
+         return Classes::all();
     }
 
     
@@ -46,9 +46,9 @@ class ClassesController extends Controller
      * @param  \App\classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function show(classes $classes)
+    public function show(classes $classes, $id)
     {
-        return Admins::where('id', $id)->first();
+        return classes::where('id', $id)->first();
     }
 
    
@@ -64,7 +64,7 @@ class ClassesController extends Controller
     {
         $data = $request->all();
         
-        $classes = Admins::where('id', $id)->first();
+        $classes = classes::where('id', $id)->first();
         $classes->update($data);
 
         return response()->json([
@@ -82,5 +82,18 @@ class ClassesController extends Controller
     public function destroy(classes $classes)
     {
         Classes::where('id', $id)->delete();
+    }
+
+    public function SectionStudent()
+    {
+         $sections = classes::with('Getsections')->get();
+         $students = classes::with('Getstudents')->get();
+         $allclasses = Classes::all();
+         return response()->json([
+            'status' => 200,
+            // 'students'  => $students,
+            // 'allclasses' => $allclasses,
+            'sections' => $sections
+        ]);
     }
 }

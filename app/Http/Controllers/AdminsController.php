@@ -27,10 +27,10 @@ class AdminsController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'file' => 'bail|required|mimes:jpg,png,Jpeg',
-        //     'password' => 'min:6|required'
-        // ]);
+        $request->validate([
+            'file' => 'bail|required|mimes:jpg,png,Jpeg',
+            'password' => 'min:6|required'
+        ]);
 
         $data = $request->all();
         $imagename = $request['picture'].".".$request->file('file')->extension();

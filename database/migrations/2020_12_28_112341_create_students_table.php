@@ -17,9 +17,11 @@ class CreateStudentsTable extends Migration
             $table->id();
             $table->string('student_id');
             $table->string('section_id');
+            $table->string('section_name');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('class_id');
+            $table->string('class_name');
             $table->string('email')->unique();
             $table->string('phone');
             $table->string('picture');
