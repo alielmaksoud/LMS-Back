@@ -60,7 +60,7 @@ class ClassesController extends Controller
      * @param  \App\classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, classes $classes)
+    public function update(Request $request, classes $classes, $id)
     {
         $data = $request->all();
         
@@ -79,10 +79,31 @@ class ClassesController extends Controller
      * @param  \App\classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(classes $classes)
+    public function destroy(classes $classes, $id)
     {
-        Classes::where('id', $id)->delete();
+        
+        $classes = classes::with('Getsections')->get();
+        $sections = Classes::find($id)->Getsections()->get();
+
+
+        if(count($sections) < 1){
+            Classes::where('id', $id)->delete();
+            return response()->json([
+                'status' => 200,
+                'message'  => "Class has been deleted",
+                'classes' => $classes
+            ]);
     }
+    else {
+    return response()->json([
+        'status' => 200,
+        'message'  => "Cannot delete while Class has Sections" ,
+        'classes' => $classes
+    ]);
+
+
+    }
+}
 
     public function SectionStudent()
     {

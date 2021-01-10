@@ -6,6 +6,7 @@ use App\students;
 use App\classes;
 use App\section;
 use Illuminate\Http\Request;
+use Validator;
 use File;
 use Storage;
 
@@ -31,7 +32,8 @@ class StudentsController extends Controller
     {
 
         $request->validate([
-            'file' => 'bail|required|mimes:jpg,png,Jpeg'
+            'file' => 'bail|required|mimes:jpg,png,Jpeg',
+            'phone' => ['required', 'regex:/^((961[\s-]*(3|7(0|1)))|([\s+]961[\s-]*(3|7(0|1)))|(03|7(0|1)))[\s+-]*\d{6}$/u'],
         ]);
 
 
@@ -73,19 +75,10 @@ class StudentsController extends Controller
      */
     public function update(Request $request, students $student, $id)
     {
-        
-        // $data = $request->all();
-
-        // $student = Students::where('id', $id)->first();
-        // $student->update($data);
-
-        // return response()->json([
-        //     'status' => 200,
-        //     'student'  => $student
-        // ]);
 
         $request->validate([
             'file' => 'bail|mimes:jpg,png,jpeg',
+            'phone' => ['required', 'regex:/^((961[\s-]*(3|7(0|1)))|([\s+]961[\s-]*(3|7(0|1)))|(03|7(0|1)))[\s+-]*\d{6}$/u'],
         ]);
 
         $data = $request->all();

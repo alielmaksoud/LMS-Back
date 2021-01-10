@@ -59,12 +59,12 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::delete('/attendance/{id}', 'AttendanceController@destroy');
     //Classes routes
     Route::post('/classes', 'ClassesController@store');
-    Route::put('/classes/{id}', 'ClassesController@update');
+    Route::post('/classes/{id}', 'ClassesController@update');
     Route::delete('/classes/{id}', 'ClassesController@destroy');
     Route::get('/classesinfo', 'ClassesController@SectionStudent');
     
     //Section Routes
-    Route::post('/section', 'SectionController@store');
+    Route::post('/section/{id}', 'SectionController@store');
     Route::put('/section/{id}', 'SectionController@update');
     Route::delete('/section/{id}', 'SectionController@destroy');
 
