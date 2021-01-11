@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\students;
+use App\classes;
+use App\section;
 use Illuminate\Http\Request;
+use Validator;
+use File;
+use Storage;
 
 class StudentsController extends Controller
 {
@@ -14,10 +19,7 @@ class StudentsController extends Controller
      */
     public function index()
     {
-         return Students::all();
-
-        // $students = students::with('GetAttendance')->get();
-        // dd($students);
+        return students::all();
     }
 
     /**
@@ -28,10 +30,24 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
+
+        $request->validate([
+            'file' => 'bail|required|mimes:jpg,png,Jpeg',
+            'phone' => ['required', 'regex:/^((961[\s-]*(3|7(0|1)))|([\s+]961[\s-]*(3|7(0|1)))|(03|7(0|1)))[\s+-]*\d{6}$/u'],
+        ]);
+
+
         $data = $request->all();
+        $imagename = $request['picture'].".".$request->file('file')->extension();
+        $image = $request->file('file')->storeAs('students/avatars', $imagename);
         $student = new Students();
         $student->fill($data);
+        $classes = classes::where('id', $request['class_id'])->first();
+        $section = section::where('id', $request['section_id'])->first();
         $student->student_id = $data['first_name'] . $data['phone'];
+        $student->class_name = $classes->class_name;
+        $student->section_name = $section->section_name;
+        $student->picture = $imagename;
         $student->save();
 
         return response()->json([
@@ -57,13 +73,48 @@ class StudentsController extends Controller
      * @param  \App\students  $students
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, students $students, $id)
+    public function update(Request $request, students $student, $id)
     {
-        $data = $request->all();
-        
-        $student = Students::where('id', $id)->first();
-        $student->update($data);
 
+        $request->validate([
+            'file' => 'bail|mimes:jpg,png,jpeg',
+            'phone' => ['required', 'regex:/^((961[\s-]*(3|7(0|1)))|([\s+]961[\s-]*(3|7(0|1)))|(03|7(0|1)))[\s+-]*\d{6}$/u'],
+        ]);
+
+        $data = $request->all();
+
+        $student = students::where('id', $id)->first();
+        if(!empty($request['first_name']) && $request['first_name'] !== "undefined"){
+            $student->first_name = $request['first_name'];
+        }if(!empty($request['last_name']) && $request['last_name'] !== "undefined"){
+            $student->last_name = $request['last_name'];
+        }if(!empty($request['class_id']) && $request['class_id'] !== "undefined"){
+            $classes = classes::where('id', $request['class_id'])->first();
+            $student->class_name = $classes->class_name;
+            $student->class_id = $request['class_id'];
+        }if(!empty($request['section_id']) && $request['section_id'] !== "undefined"){
+            $section = section::where('id', $request['section_id'])->first();
+            $student->section_name = $section->section_name;
+            $student->section_id = $request['section_id'];
+        }if(!empty($request['email']) && $request['email'] !== "undefined"){
+            $student->email = $request['email'];
+        }if(!empty($request['phone']) && $request['phone'] !== "undefined"){
+            $student->phone = $request['phone'];
+        }if(!empty($request['file']) && !empty($request['picture'])){
+            $imagename = $request['picture'].".".$request->file('file')->extension();
+            $oldimage = $student->picture .".".$request->file('file')->extension();
+            $fileName = storage_path()."/app/students/avatars/" . $imagename ;
+            if(File::exists($fileName)){
+                File::delete($fileName);
+            }
+            $image = $request->file('file')->storeAs('students/avatars', $imagename);
+            if(File::exists($oldimage)){
+                File::delete($oldimage);
+            }
+            $student->picture = $imagename;
+        }
+        $student->save();
+        
         return response()->json([
             'status' => 200,
             'student'  => $student
@@ -78,10 +129,8 @@ class StudentsController extends Controller
      */
     public function destroy(students $students, $id)
     {
-        Students::where('id', $id)->delete();
-        return response()->json([
-            'status' => 200,
-            'message'  => 'Student profile deleted'
-        ]);  
+        students::where('id', $id)->delete();
+
+        return students::all();
     }
 }

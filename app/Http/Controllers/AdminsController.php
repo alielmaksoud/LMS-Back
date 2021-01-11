@@ -27,10 +27,11 @@ class AdminsController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'file' => 'bail|required|mimes:jpg,png,Jpeg',
-        //     'password' => 'min:6|required'
-        // ]);
+        $request->validate([
+            'file' => 'bail|required|mimes:jpg,png,Jpeg',
+            'password' => 'min:6|required',
+            'phone' => ['required', 'regex:/^((961[\s-]*(3|7(0|1)))|([\s+]961[\s-]*(3|7(0|1)))|(03|7(0|1)))[\s+-]*\d{6}$/u'],
+        ]);
 
         $data = $request->all();
         $imagename = $request['picture'].".".$request->file('file')->extension();
@@ -69,7 +70,8 @@ class AdminsController extends Controller
     {
         $request->validate([
             'file' => 'bail|mimes:jpg,png,jpeg',
-            'password' => 'min:6'
+            'password' => 'min:6',
+            'phone' => ['required', 'regex:/^((961[\s-]*(3|7(0|1)))|([\s+]961[\s-]*(3|7(0|1)))|(03|7(0|1)))[\s+-]*\d{6}$/u'],
         ]);
 
         $data = $request->all();

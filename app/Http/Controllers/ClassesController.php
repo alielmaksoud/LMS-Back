@@ -14,10 +14,10 @@ class ClassesController extends Controller
      */
     public function index()
     {
-         $sections = classes::with('Getsections')->get();
-        // $students = classes::with('Getstudents')->get();
-        dd($sections);
-        // return Classes::all();
+        //  $sections = classes::with('Getsections')->get();
+        // // $students = classes::with('Getstudents')->get();
+        // dd($sections);
+         return Classes::all();
     }
 
     
@@ -46,9 +46,9 @@ class ClassesController extends Controller
      * @param  \App\classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function show(classes $classes)
+    public function show(classes $classes, $id)
     {
-        return Admins::where('id', $id)->first();
+        return classes::where('id', $id)->first();
     }
 
    
@@ -60,11 +60,11 @@ class ClassesController extends Controller
      * @param  \App\classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, classes $classes)
+    public function update(Request $request, classes $classes, $id)
     {
         $data = $request->all();
         
-        $classes = Admins::where('id', $id)->first();
+        $classes = classes::where('id', $id)->first();
         $classes->update($data);
 
         return response()->json([
@@ -79,8 +79,42 @@ class ClassesController extends Controller
      * @param  \App\classes  $classes
      * @return \Illuminate\Http\Response
      */
-    public function destroy(classes $classes)
+    public function destroy(classes $classes, $id)
     {
-        Classes::where('id', $id)->delete();
+        
+        $classes = classes::with('Getsections')->get();
+        $sections = Classes::find($id)->Getsections()->get();
+
+
+        if(count($sections) < 1){
+            Classes::where('id', $id)->delete();
+            return response()->json([
+                'status' => 200,
+                'message'  => "Class has been deleted",
+                'classes' => $classes
+            ]);
+    }
+    else {
+    return response()->json([
+        'status' => 200,
+        'message'  => "Cannot delete while Class has Sections" ,
+        'classes' => $classes
+    ]);
+
+
+    }
+}
+
+    public function SectionStudent()
+    {
+         $sections = classes::with('Getsections')->get();
+         $students = classes::with('Getstudents')->get();
+         $allclasses = Classes::all();
+         return response()->json([
+            'status' => 200,
+            // 'students'  => $students,
+            // 'allclasses' => $allclasses,
+            'sections' => $sections
+        ]);
     }
 }

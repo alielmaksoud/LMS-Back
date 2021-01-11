@@ -37,5 +37,33 @@ class AvatarController extends Controller
             return Response()->json(['message' => $fileName . ' Avatar file not found.']);
 
         }
+
+
+        public function StudentAvatar($avatarName)
+        {
+            $fileName = storage_path()."/app/students/avatars/$avatarName";
+    
+            if (File::exists($fileName))
+            {
+                return Response::download($fileName);
+            }
+    
+            return Response()->json(['message' => $fileName . ' Avatar file not found.']);
+
+        }
+
+        public function DelStudentAvatar($avatarName)
+        {
+            $fileName = storage_path()."/app/students/avatars/$avatarName";
+    
+            if (File::exists($fileName))
+            {
+                File::delete($fileName);
+                return Response()->json(['message' => $fileName . ' Avatar file deleted.']);
+            }
+    
+            return Response()->json(['message' => $fileName . ' Avatar file not found.']);
+
+        }
     
 }

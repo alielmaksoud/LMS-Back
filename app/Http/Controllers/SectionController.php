@@ -25,16 +25,20 @@ class SectionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $class_id)
     {
+        $request->validate([
+            'section_name' => 'required|max:1',
+        ]);
+
         $data = $request->all();
         $section = new Section();
         $section->fill($data);
         $section->save();
-
+        $sections = section::where('class_id', $class_id)->get();
         return response()->json([
             'status' => 200,
-            'section'  => $section
+            'section'  => $sections
         ]);
     }
 
@@ -44,9 +48,9 @@ class SectionController extends Controller
      * @param  \App\section  $section
      * @return \Illuminate\Http\Response
      */
-    public function show(section $section)
+    public function show(section $section, $id)
     {
-        return Admins::where('id', $id)->first();
+        return section::where('id', $id)->first();
     }
 
 
@@ -59,14 +63,18 @@ class SectionController extends Controller
      */
     public function update(Request $request, section $section)
     {
+        $request->validate([
+            'section_name' => 'required|max:1',
+        ]);
+        
         $data = $request->all();
         
-        $section = Admins::where('id', $id)->first();
+        $section = section::where('id', $id)->first();
         $section->update($data);
-
+        
         return response()->json([
             'status' => 200,
-            'student'  => $section
+            'sections'  => $section
         ]);
     }
 
@@ -76,8 +84,21 @@ class SectionController extends Controller
      * @param  \App\section  $section
      * @return \Illuminate\Http\Response
      */
-    public function destroy(section $section)
-    {
-        Section::where('id', $id)->delete();
-    }
+    public function destroy(section $section,$id)
+    {   
+        $students = section::find($id)->Getstudents()->get();
+        if(count($students) < 1){
+                section::where('id', $id)->delete();
+                return response()->json([
+                    'status' => 200,
+                    'message'  => "section deleted",
+                ]);
+        }
+        else {
+        return response()->json([
+            'status' => 200,
+            'message'  => "Cannot delete while section has students" ,
+        ]);
+      }
+  }    
 }
