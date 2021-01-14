@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\attendance;
 use Illuminate\Http\Request;
+use App\students;
 
 class AttendanceController extends Controller
 {
@@ -27,14 +28,15 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
+        
         $data = $request->all();
         $attendance = new Attendance();
         $attendance->fill($data);
         $attendance->save();
-
+        $studentattendance = students::find($request['student_id'])->Getattendance()->get();
         return response()->json([
             'status' => 200,
-            'attendance'  => $attendance
+            'attendance'  => $studentattendance
         ]);    }
 
     /**
@@ -43,9 +45,9 @@ class AttendanceController extends Controller
      * @param  \App\attendance  $attendance
      * @return \Illuminate\Http\Response
      */
-    public function show(attendance $attendance)
+    public function show(attendance $attendance, $id)
     {
-        return Attendance::where('id', $id)->first();
+        return attendance::where('id', $id)->first();
 
     }
 
@@ -78,10 +80,12 @@ class AttendanceController extends Controller
      */
     public function destroy(attendance $attendance, $id)
     {
-        Attendance::where('id', $id)->delete();
+        $att = attendance::where('id', $id)->first()['student_id'];
+        attendance::where('id', $id)->delete();
+        $studentattendance = students::find($att)->Getattendance()->get();
         return response()->json([
             'status' => 200,
-            'message'  => 'Attendance record deleted'
+            'attendance'  => $studentattendance
         ]);    
     }
 }

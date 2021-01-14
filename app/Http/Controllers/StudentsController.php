@@ -19,7 +19,13 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        return students::all();
+        // $attendence = students::with('GetAttendance')->get();
+
+         return students::all();
+        // return response()->json([
+        //     'status' => 200,
+        //     'student'  => $attendence
+        // ]);
     }
 
     /**
@@ -34,6 +40,7 @@ class StudentsController extends Controller
         $request->validate([
             'file' => 'bail|required|mimes:jpg,png,Jpeg',
             'phone' => ['required', 'regex:/^((961[\s-]*(3|7(0|1)))|([\s+]961[\s-]*(3|7(0|1)))|(03|7(0|1)))[\s+-]*\d{6}$/u'],
+            'email' => 'required|email|unique:students'
         ]);
 
 
@@ -44,12 +51,12 @@ class StudentsController extends Controller
         $student->fill($data);
         $classes = classes::where('id', $request['class_id'])->first();
         $section = section::where('id', $request['section_id'])->first();
-        $student->student_id = $data['first_name'] . $data['phone'];
+        $student->student_id = substr($data['first_name'], -2) ."-".substr($data['phone'], -2) . substr($data['last_name'], -2);
         $student->class_name = $classes->class_name;
         $student->section_name = $section->section_name;
         $student->picture = $imagename;
         $student->save();
-
+            
         return response()->json([
             'status' => 200,
             'student'  => $student
@@ -62,9 +69,9 @@ class StudentsController extends Controller
      * @param  \App\students  $students
      * @return \Illuminate\Http\Response
      */
-    public function show(students $students)
+    public function show(students $students, $id)
     {
-        return Admins::where('id', $id)->first();
+        return students::where('id', $id)->first();
     }
     /**
      * Update the specified resource in storage.
@@ -132,5 +139,14 @@ class StudentsController extends Controller
         students::where('id', $id)->delete();
 
         return students::all();
+    }
+
+    public function StudentAttendance()
+    {
+         $students = students::with('Getattendance')->get();
+         return response()->json([
+            'status' => 200,
+            'sections' => $students
+        ]);
     }
 }

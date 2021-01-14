@@ -16,4 +16,9 @@ class section extends Model
             return $this->hasMany(students::class, 'section_id', 'id');
         }
 
+        public function Getattendance()
+        {
+            return $this->hasManyThrough(attendance::class, students::class, 'section_id', 'section_id');
+        }
+
 }

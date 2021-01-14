@@ -29,6 +29,9 @@ class ClassesController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'class_name' => 'required|unique:classes'
+        ]);
         $data = $request->all();
         $classes = new Classes();
         $classes->fill($data);
@@ -62,6 +65,7 @@ class ClassesController extends Controller
      */
     public function update(Request $request, classes $classes, $id)
     {
+        
         $data = $request->all();
         
         $classes = classes::where('id', $id)->first();

@@ -14,9 +14,13 @@ class SectionController extends Controller
      */
     public function index()
     {
-        return Section::all();
-        // $section = section::with('Getstudents')->get();
+       // return Section::all();
+         $section = section::with('Getstudents', 'Getattendance')->get();
         // dd($section);
+        return response()->json([
+            'status' => 200,
+            'section'  => $section
+        ]);
     }
 
     /**

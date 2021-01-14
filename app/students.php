@@ -11,7 +11,7 @@ class students extends Model
         ];
 
 
-        public function GetAttendance()
+        public function Getattendance()
         {
             return $this->hasMany(attendance::class, 'student_id', 'id');
         }

@@ -31,6 +31,7 @@ class AdminsController extends Controller
             'file' => 'bail|required|mimes:jpg,png,Jpeg',
             'password' => 'min:6|required',
             'phone' => ['required', 'regex:/^((961[\s-]*(3|7(0|1)))|([\s+]961[\s-]*(3|7(0|1)))|(03|7(0|1)))[\s+-]*\d{6}$/u'],
+            'email' => 'required|email|unique:admins'
         ]);
 
         $data = $request->all();
@@ -72,6 +73,7 @@ class AdminsController extends Controller
             'file' => 'bail|mimes:jpg,png,jpeg',
             'password' => 'min:6',
             'phone' => ['required', 'regex:/^((961[\s-]*(3|7(0|1)))|([\s+]961[\s-]*(3|7(0|1)))|(03|7(0|1)))[\s+-]*\d{6}$/u'],
+         
         ]);
 
         $data = $request->all();

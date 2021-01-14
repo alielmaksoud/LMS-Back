@@ -28,6 +28,7 @@ Route::get('/admin/{id}', 'AdminsController@show');
 //student get routes
 Route::get('/student', 'StudentsController@index');
 Route::get('/student/{id}', 'StudentsController@show');
+Route::get('/studentsinfo', 'StudentsController@StudentAttendance');
 
 //attendance get routes
 Route::get('/attendance', 'AttendanceController@index');
@@ -38,6 +39,8 @@ Route::get('/section/{id}', 'SectionController@show');
 //classes get routes
 Route::get('/classes', 'ClassesController@index');
 Route::get('/classes/{id}', 'ClassesController@show');
+Route::get('/classesinfo', 'ClassesController@SectionStudent');
+
 
 Route::group(['middleware' => ['jwt.verify']], function() {
     // Avatar routes
@@ -53,6 +56,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('/student', 'StudentsController@store');
     Route::post('/student/{id}', 'StudentsController@update');
     Route::delete('/student/{id}', 'StudentsController@destroy');
+    
     //Attendance routes
     Route::post('/attendance', 'AttendanceController@store');
     Route::put('/attendance/{id}', 'AttendanceController@update');
@@ -61,7 +65,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('/classes', 'ClassesController@store');
     Route::post('/classes/{id}', 'ClassesController@update');
     Route::delete('/classes/{id}', 'ClassesController@destroy');
-    Route::get('/classesinfo', 'ClassesController@SectionStudent');
+    
     
     //Section Routes
     Route::post('/section/{id}', 'SectionController@store');
