@@ -27,19 +27,19 @@ class AdminsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'file' => 'bail|required|mimes:jpg,png,Jpeg',
-            'password' => 'min:6|required',
-            'phone' => ['required', 'regex:/^((961[\s-]*(3|7(0|1)))|([\s+]961[\s-]*(3|7(0|1)))|(03|7(0|1)))[\s+-]*\d{6}$/u'],
-            'email' => 'required|email|unique:admins'
-        ]);
+        // $request->validate([
+        //     'file' => 'bail|required|mimes:jpg,png,Jpeg',
+        //     'password' => 'min:6|required',
+        //     'phone' => ['required', 'regex:/^((961[\s-]*(3|7(0|1)))|([\s+]961[\s-]*(3|7(0|1)))|(03|7(0|1)))[\s+-]*\d{6}$/u'],
+        //     'email' => 'required|email|unique:admins'
+        // ]);
 
         $data = $request->all();
-        $imagename = $request['picture'].".".$request->file('file')->extension();
-        $image = $request->file('file')->storeAs('admins/avatars', $imagename);
+        // $imagename = $request['picture'].".".$request->file('file')->extension();
+        // $image = $request->file('file')->storeAs('admins/avatars', $imagename);
         $admin = new Admins();
         $admin->fill($data);
-        $admin->picture = $imagename;
+        // $admin->picture = $imagename;
         $admin->save();
 
         return response()->json([

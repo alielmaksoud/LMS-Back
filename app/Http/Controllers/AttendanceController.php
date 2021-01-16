@@ -47,7 +47,7 @@ class AttendanceController extends Controller
      */
     public function show(attendance $attendance, $id)
     {
-        return attendance::where('id', $id)->first();
+        return attendance::where('student_id', $id)->get();
 
     }
 

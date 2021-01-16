@@ -54,7 +54,8 @@ class SectionController extends Controller
      */
     public function show(section $section, $id)
     {
-        return section::where('id', $id)->first();
+        // $section = section::with('Getattendance')->get();
+        return section::with('Getattendance')->where('id', $id)->first();
     }
 
 
