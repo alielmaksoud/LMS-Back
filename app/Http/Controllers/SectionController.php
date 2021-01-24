@@ -58,6 +58,12 @@ class SectionController extends Controller
         return section::with('Getattendance')->where('id', $id)->first();
     }
 
+    public function SectionStudents(section $section, $id)
+    {
+        // $section = section::with('Getattendance')->get();
+        return section::with('Getstudents')->where('id', $id)->first();
+    }
+
 
     /**
      * Update the specified resource in storage.

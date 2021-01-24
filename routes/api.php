@@ -33,9 +33,11 @@ Route::get('/studentsinfo', 'StudentsController@StudentAttendance');
 //attendance get routes
 Route::get('/attendance', 'AttendanceController@index');
 Route::get('/attendance/{id}', 'AttendanceController@show');
+Route::post('/massattendance', 'AttendanceController@MassStore');
 //section get routes
 Route::get('/section', 'SectionController@index');
 Route::get('/section/{id}', 'SectionController@show');
+Route::get('/sectionstudents/{id}', 'SectionController@SectionStudents');
 //classes get routes
 Route::get('/classes', 'ClassesController@index');
 Route::get('/classes/{id}', 'ClassesController@show');

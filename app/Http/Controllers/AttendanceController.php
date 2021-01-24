@@ -37,7 +37,23 @@ class AttendanceController extends Controller
         return response()->json([
             'status' => 200,
             'attendance'  => $studentattendance
-        ]);    }
+        ]);    
+    }
+
+    public function MassStore(Request $request)
+    {
+         
+        $data = $request->all();
+        foreach($data as $one){
+        $attendance = new Attendance();
+        $attendance->fill($one);
+        $attendance->save();
+        };
+        return response()->json([
+            'status' => 200,
+            'attendance'  => Attendance::all()
+        ]);    
+    }
 
     /**
      * Display the specified resource.
